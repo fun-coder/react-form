@@ -9,10 +9,10 @@ export class Field {
   }
 
   setValue(value) {
-    const oldValue = this.value;
+    const prevValue = this.value;
     this.value = value;
     const fixedSubscribers = this.subscribers.fixedVersion();
-    this.validate().then(({ message }) => fixedSubscribers.trigger({ value, oldValue, message }));
+    this.validate().then(({ message }) => fixedSubscribers.trigger({ value, prevValue, message }));
   }
 
   getValue() {

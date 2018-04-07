@@ -5,6 +5,7 @@ export class Subscribe {
   }
 
   trigger(value) {
+    this.value = value;
     this.subscribers.forEach(subscriber => subscriber(value));
   }
 
