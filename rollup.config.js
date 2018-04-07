@@ -12,7 +12,7 @@ export default {
   plugins: [
     babel({
       exclude: 'node_modules/**',
-      externalHelpers: true,
+      externalHelpers: false,
     }),
     nodeResolve({
       jsnext: true,
