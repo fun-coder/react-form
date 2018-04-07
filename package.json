@@ -1,6 +1,6 @@
 {
   "name": "@qlee/react-form",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "react form",
   "main": "./index.js",
   "scripts": {

@@ -18,7 +18,6 @@ export const fieldHOC = Component => {
     }
 
     componentWillMount() {
-      console.log('FieldHOC will mount');
       const { name } = this.props;
       this.form.mountField(name, this.field);
     }

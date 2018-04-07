@@ -2,7 +2,6 @@ import { FormException } from "./form-exception";
 
 export class Form {
   constructor({ subscribers }) {
-    console.log('subscribers', subscribers);
     this.fields = new Map();
     this.subscribers = subscribers;
   }
@@ -24,9 +23,7 @@ export class Form {
 
   startHook(name, field) {
     const subscribers = this.subscribers.get(name) || new Set();
-    console.log('start hook for', name, subscribers);
     for (const { options, subscriber } of subscribers) {
-      console.log('options', options.immediate, subscriber.name);
       field.subscribe(
         this.wrapSubscriber(options.valid, subscriber),
         { immediate: options.immediate }

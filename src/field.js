@@ -9,7 +9,6 @@ export class Field {
   }
 
   setValue(value) {
-    console.log('setValue', value);
     const oldValue = this.value;
     this.value = value;
     const fixedSubscribers = this.subscribers.fixedVersion();

@@ -9,7 +9,6 @@ export class Subscribe {
   }
 
   add(fn, options) {
-    console.log('options', options, this.value);
     this.subscribers = this.subscribers.concat([fn]);
     if (options.immediate) fn(this.value);
   }
