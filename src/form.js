@@ -12,7 +12,9 @@ export class Form {
 
   mountField(name, field) {
     this.fields.set(name, field);
-    // this.startHook(name, field)
+    if (this.target && this.target.isMounted()) {
+      this.startHook(name, field)
+    }
   }
 
   startAllHooks() {
