@@ -4,6 +4,7 @@ export class Form {
   constructor({ subscribers }) {
     this.fields = new Map();
     this.subscribers = subscribers;
+    this.hooked = false;
   }
 
   registerTarget(target) {
@@ -12,15 +13,16 @@ export class Form {
 
   mountField(name, field) {
     this.fields.set(name, field);
-    if (this.target && this.target.isMounted()) {
+    if (this.hooked) {
       this.startHook(name, field)
     }
   }
 
   startAllHooks() {
-    for(let [name, field] of this.fields) {
+    for (let [name, field] of this.fields) {
       this.startHook(name, field);
     }
+    this.hooked = true;
   }
 
   startHook(name, field) {
