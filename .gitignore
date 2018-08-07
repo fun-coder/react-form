@@ -64,4 +64,6 @@ typings/
 
 .idea
 package-lock.json
-index.js
+index.ts
+.cache
+dist
