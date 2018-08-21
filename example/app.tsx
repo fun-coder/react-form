@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { UserContainer } from "./user-container";
+import { UserContainer } from "./UserContainer";
 
 export class App extends Component {
   render() {
-    return <UserContainer />;
+    const defaultValue = { name: 'Qlee', password: '123' };
+    return <UserContainer defaultValues={ defaultValue }/>;
   }
 }

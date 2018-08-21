@@ -1,9 +1,13 @@
 {
   "presets": [
-    "stage-0",
-    "react"
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": "last 1 Firefox versions"
+        }
+      }
+    ]
   ],
-  "plugins": [
-    "external-helpers"
-  ]
+  "plugins": []
 }

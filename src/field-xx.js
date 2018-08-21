@@ -1,7 +1,7 @@
 import React from "react";
 import { Subscribe } from "./subscribe";
 
-export class Field {
+export class FieldXx {
   constructor({ validators = [], defaultValue = null }) {
     this.value = defaultValue;
     this.validators = validators;

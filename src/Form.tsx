@@ -1,47 +1,35 @@
-import React, { Component, ComponentType } from "react";
+import React from "react";
 import { Field } from './Field';
-import { Class } from "estree";
-
-type Dict<T> = {
-  [key: string]: T
-}
+import { Dict } from "./types";
 
 export class Form {
-  public static create<P>(TargetComp: ComponentType<P>): ComponentType<P> {
-    return class extends Component<P> {
-      form: Form;
+  private readonly fields: Dict<Field>;
 
-      constructor(props: P) {
-        super(props);
-        this.form = new Form();
-      }
-
-      render() {
-        const props = this.props as any;
-        const allProps = { form: this.form, ...props };
-        return <TargetComp { ...allProps }/>;
-      }
-    };
+  constructor(defaultValue: Dict<any> = {}) {
+    this.fields = {};
+    for (const fieldName in defaultValue) {
+      const value = defaultValue[fieldName];
+      this.fields[fieldName] = Form.createField(fieldName, value);
+    }
   }
 
-  private fields: Dict<Field> = {};
-
-  constructor(private defaultValue: Dict<any> = {}) {
-    Object
-      .keys(defaultValue)
-      .forEach(key => {
-        this.fields[key] = Form.createField(key, defaultValue[key]);
-      });
-  }
-
-  getFiled<T>(fieldName: string): Field {
-    if (!!this.fields[fieldName]) {
-      this.fields[fieldName] = Form.createField(fieldName, this.defaultValue[fieldName]);
+  public getFiled<T>(fieldName: string): Field {
+    if (!this.fields[fieldName]) {
+      this.fields[fieldName] = Form.createField(fieldName, null);
     }
     return this.fields[fieldName];
   }
 
-  private static createField<T>(name: string, defaultValue: T): Field {
+  public async submit() {
+    const data: Dict<any> = {};
+    for(const fieldName in this.fields) {
+      data[fieldName] = await this.getFiled(fieldName).getValidValue();
+      console.log(fieldName, data[fieldName]);
+    }
+    return data;
+  }
+
+  private static createField(name: string, defaultValue: any): Field {
     return new Field(name, defaultValue);
   }
 };
