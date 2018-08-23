@@ -23,14 +23,13 @@ class UserContainerComponent extends Component<UserContainerProps, any> {
   render() {
     return <div>
       <TextField name="name"/>
-      <TextField name="password" validators={validators}/>
+      <TextField name="password" validators={validators} />
       <button onClick={ this.submit }>Submit</button>
     </div>;
   }
 
   private submit = async () => {
-    console.log(this.props.form);
-    const data = await this.props.form!.submit();
+    const data = await this.props.form!.submit().catch(e => null);
     console.log('Data', data);
   }
 }

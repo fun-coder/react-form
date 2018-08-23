@@ -24,7 +24,6 @@ export class Form {
     const data: Dict<any> = {};
     for(const fieldName in this.fields) {
       data[fieldName] = await this.getFiled(fieldName).getValidValue();
-      console.log(fieldName, data[fieldName]);
     }
     return data;
   }

@@ -1,7 +1,7 @@
 import { PureComponent, default as React } from "react";
-import { ChangeSubscriber, Field, FieldChange } from "../../src/Field";
+import { Field, FieldChange, ChangeSubscriber } from "../../src/Field";
 import { FieldFactory, FieldProps } from "../../src/FieldFactory";
-import { Optional } from "../../src/optional";
+import { Optional } from "../../src/Optional";
 import { ValidationError } from "../../src/types";
 
 interface TextFieldProps extends FieldProps {
@@ -9,42 +9,47 @@ interface TextFieldProps extends FieldProps {
 }
 
 interface TextFieldState {
-  value?: string,
+  value: string,
   error?: string,
 }
 
 class TextFieldComponent extends PureComponent<TextFieldProps, TextFieldState> {
   constructor(props: TextFieldProps) {
     super(props);
-    this.state = {};
+    this.state = { value: '' };
   }
 
   componentDidMount() {
-    this.props.field!.subscribe(this.onField);
+    this.props.field!.subscribe(this.onFieldChange, this.onFieldError);
   }
 
   componentWillUnmount() {
-    this.props.field!.unsubscribe(this.onField);
+    this.props.field!.unsubscribe(this.onFieldChange, this.onFieldError);
   }
 
-  private onField = (change?: FieldChange<string>, error?: ValidationError) => {
-    this.setState({
-      value: Optional.of(change).mapTo(c => c.curr),
-      error: Optional.of(error).mapTo(e => e.message)
-    });
+  private onFieldChange: ChangeSubscriber = (change: FieldChange<string>) => {
+    this.setState({ value: change.curr });
+  };
+
+  private onFieldError = (error?: ValidationError) => {
+    this.setState({ error: Optional.of(error).mapTo(e => e.message) });
   };
 
   render() {
     const { value, error } = this.state;
     return <div>
       <span>
-        <input type="text" value={ value } onChange={ this.setValue }/>
+        <input type="text"
+               value={ value }
+               onChange={ this.setValue }/>
       </span>
       { error && <span>{ error }</span> }
     </div>;
   }
 
   private setValue = ({ target }: { target: HTMLInputElement }) => this.props.field!.setValue(target.value);
+
+  private onBlur = () => this.props.field!.validate()
 }
 
 export const TextField = FieldFactory.create(TextFieldComponent);
