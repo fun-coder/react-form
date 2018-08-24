@@ -15,15 +15,17 @@ export class Form {
 
   public getFiled<T>(fieldName: string): Field {
     if (!this.fields[fieldName]) {
-      this.fields[fieldName] = Form.createField(fieldName, null);
+      this.fields[fieldName] = Form.createField(fieldName, undefined);
     }
     return this.fields[fieldName];
   }
 
   public async submit() {
+    await Promise.all(Object.keys(this.fields)
+      .map(fieldName => this.getFiled(fieldName).validate()));
     const data: Dict<any> = {};
-    for(const fieldName in this.fields) {
-      data[fieldName] = await this.getFiled(fieldName).getValidValue();
+    for (const fieldName in this.fields) {
+      data[fieldName] = await this.getFiled(fieldName).getValue();
     }
     return data;
   }

@@ -1,5 +1,5 @@
 import { Optional } from "./Optional";
-import { Dict, ValidationError, Validator } from "./types";
+import { Dict, isFunction, MessageGenerator, ValidationError, Validator } from "./types";
 
 export interface FieldChange<T> {
   name: string,
@@ -93,7 +93,10 @@ export class Field {
   private async execValidator(validator: Validator, value: any) {
     const successful = await validator.validate(value);
     if (!successful) {
-      throw new ValidationError(this.fieldName, validator.message);
+      const message = isFunction(validator.message)
+        ? (validator.message as MessageGenerator)(this.fieldName, value)
+        : validator.message as string;
+      throw new ValidationError(this.fieldName, message);
     }
   }
 
@@ -119,7 +122,7 @@ export class Field {
     subscribers[describer.value] = subscriber;
   }
 
-  private cleanError() {
+  public cleanError() {
     this.setError(undefined);
   }
 

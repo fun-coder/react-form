@@ -3077,10 +3077,10 @@ var factoryWithTypeCheckers = function(isValidElement, throwOnDirectAccess) {
    *       description: Props.string,
    *
    *       // A required enum prop named "category".
-   *       category: Props.oneOf(['News','Photos']).isRequired,
+   *       category: Props.oneOf(['News','Photos']).required,
    *
    *       // A prop named "dialog" that requires an instance of Dialog.
-   *       dialog: Props.instanceOf(Dialog).isRequired
+   *       dialog: Props.instanceOf(Dialog).required
    *     },
    *     render: function() { ... }
    *   });
@@ -3088,7 +3088,7 @@ var factoryWithTypeCheckers = function(isValidElement, throwOnDirectAccess) {
    * A more formal specification of how these methods are used:
    *
    *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
-   *   decl := ReactPropTypes.{type}(.isRequired)?
+   *   decl := ReactPropTypes.{type}(.required)?
    *
    * Each and every declaration produces a function with the same signature. This
    * allows the creation of custom validation functions. For example:
@@ -6266,7 +6266,7 @@ var fieldHOC = function fieldHOC(Component) {
   }, _class.defaultProps = {
     validators: [],
     defaultValue: null
-  }, _class.contextTypes = _defineProperty({}, formKey, propTypes.object.isRequired), _temp;
+  }, _class.contextTypes = _defineProperty({}, formKey, propTypes.object.required), _temp;
 };
 
 exports.formHOC = formHOC;

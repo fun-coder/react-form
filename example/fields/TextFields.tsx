@@ -3,9 +3,11 @@ import { Field, FieldChange, ChangeSubscriber } from "../../src/Field";
 import { FieldFactory, FieldProps } from "../../src/FieldFactory";
 import { Optional } from "../../src/Optional";
 import { ValidationError } from "../../src/types";
+import { withLabel } from "../withLabel";
 
 interface TextFieldProps extends FieldProps {
   field?: Field
+  type?: string
 }
 
 interface TextFieldState {
@@ -14,6 +16,11 @@ interface TextFieldState {
 }
 
 class TextFieldComponent extends PureComponent<TextFieldProps, TextFieldState> {
+
+  static defaultProps: Partial<TextFieldProps> = {
+    type: 'text'
+  };
+
   constructor(props: TextFieldProps) {
     super(props);
     this.state = { value: '' };
@@ -28,7 +35,9 @@ class TextFieldComponent extends PureComponent<TextFieldProps, TextFieldState> {
   }
 
   private onFieldChange: ChangeSubscriber = (change: FieldChange<string>) => {
-    this.setState({ value: change.curr });
+    if (change.curr !== undefined) {
+      this.setState({ value: change.curr });
+    }
   };
 
   private onFieldError = (error?: ValidationError) => {
@@ -37,19 +46,18 @@ class TextFieldComponent extends PureComponent<TextFieldProps, TextFieldState> {
 
   render() {
     const { value, error } = this.state;
-    return <div>
-      <span>
-        <input type="text"
-               value={ value }
-               onChange={ this.setValue }/>
-      </span>
-      { error && <span>{ error }</span> }
+    return <div className="text-field">
+      <input type={ this.props.type }
+             value={ value }
+             onFocus={ this.onFocus }
+             onChange={ this.setValue }/>
+      { error && <p className="error-message">{ error }</p> }
     </div>;
   }
 
   private setValue = ({ target }: { target: HTMLInputElement }) => this.props.field!.setValue(target.value);
 
-  private onBlur = () => this.props.field!.validate()
+  private onFocus = () => this.props.field!.cleanError();
 }
 
-export const TextField = FieldFactory.create(TextFieldComponent);
+export const TextField = FieldFactory.create(withLabel(TextFieldComponent));

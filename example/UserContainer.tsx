@@ -10,20 +10,21 @@ interface UserContainerProps extends FormProps {
 
 const validators: Validator[] = [
   {
-    validate: value => {
-      console.log('value', value, !!value.trim());
-      return !!value.trim();
-    },
-    message: 'the field is required'
+    validate: value => !!value.trim(),
+    message: (fieldName: string, value: any) => `${fieldName} is required`
   }
 ];
 
 class UserContainerComponent extends Component<UserContainerProps, any> {
 
   render() {
-    return <div>
-      <TextField name="name"/>
-      <TextField name="password" validators={validators} />
+    return <div className="register-form">
+      <TextField name="name" label="Username" required/>
+      <TextField name="password" label="Password" type="password"
+                 validators={ validators } required/>
+      <TextField name="confirmedPassword" type="password"
+                 label="Confirm Password" validators={ validators } required/>
+      <TextField name="mobile" label="Mobile" validators={ validators }/>
       <button onClick={ this.submit }>Submit</button>
     </div>;
   }

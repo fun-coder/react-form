@@ -9,9 +9,13 @@ export interface Validation {
   message?: string
 }
 
+export interface MessageGenerator {
+  (fieldName: string, value: any): string
+}
+
 export interface Validator {
   validate: (value: any) => boolean | Promise<boolean>
-  message: string
+  message: MessageGenerator | string
 }
 
 export class ValidationError extends Error {
@@ -20,3 +24,5 @@ export class ValidationError extends Error {
     super(message);
   }
 }
+
+export const isFunction = (target: any) => typeof(target) === 'function';

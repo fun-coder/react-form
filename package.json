@@ -4,6 +4,7 @@
   "description": "react form",
   "main": "./index.js",
   "scripts": {
+    "start": "parcel ./example/index.html",
     "build": "rollup -c ./rollup.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -40,6 +41,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "node-sass": "^4.9.3",
     "parcel-bundler": "^1.9.7",
     "rollup": "^0.57.1",
     "rollup-plugin-babel": "^3.0.3",
