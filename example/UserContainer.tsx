@@ -20,10 +20,8 @@ class UserContainerComponent extends Component<UserContainerProps, any> {
   render() {
     return <div className="register-form">
       <TextField name="name" label="Username" required/>
-      <TextField name="password" label="Password" type="password"
-                 validators={ validators } required/>
-      <TextField name="confirmedPassword" type="password"
-                 label="Confirm Password" validators={ validators } required/>
+      <TextField name="password" label="Password" type="password" validators={ validators } required/>
+      <TextField name="confirmedPassword" type="password" label="Confirm Password" validators={ validators } required/>
       <TextField name="mobile" label="Mobile" validators={ validators }/>
       <button onClick={ this.submit }>Submit</button>
     </div>;
