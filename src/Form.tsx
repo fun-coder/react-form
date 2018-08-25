@@ -1,7 +1,8 @@
 import React from "react";
 import { Field } from './Field';
-import { Dict, ValidationError } from "./types";
 import { Optional } from "./Optional";
+import { Dict } from "./utilities/common";
+import { ValidationError } from "./utilities/validation";
 
 export class Form {
   private readonly fields: Dict<Field<any>>;

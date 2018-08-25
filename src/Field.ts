@@ -1,6 +1,6 @@
 import { Optional } from "./Optional";
-import { Dict, isFunction, MessageGenerator, ValidationError } from "./types";
-import { FieldValidator } from "./Utilify";
+import { Dict, isFunction } from "./utilities/common";
+import { FieldValidator, MessageGenerator, ValidationError } from "./utilities/validation";
 
 export interface FieldChange<T> {
   name: string,
@@ -83,7 +83,7 @@ export class Field<T> {
     return this.value;
   }
 
-  public getError(): ValidationError<T>|undefined {
+  public getError(): ValidationError<T> | undefined {
     return this.error;
   }
 

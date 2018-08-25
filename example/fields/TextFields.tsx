@@ -2,7 +2,7 @@ import { PureComponent, default as React } from "react";
 import { FieldChange, ChangeSubscriber, ErrorSubscriber } from "../../src/Field";
 import { FieldFactory, FieldProps } from "../../src/FieldFactory";
 import { Optional } from "../../src/Optional";
-import { ValidationError } from "../../src/types";
+import { ValidationError } from "../../src/utilities/common";
 import { withLabel } from "../withLabel";
 
 interface TextFieldProps extends FieldProps<string> {

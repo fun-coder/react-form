@@ -1,6 +1,6 @@
 import { Component, ComponentType, default as React } from "react";
 import { Form } from "./Form";
-import { Dict, formKey } from "./types";
+import { Dict, formKey } from "./utilities/common";
 import { instanceOf, shape } from 'prop-types';
 
 export interface FormProps {

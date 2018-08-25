@@ -1,8 +1,8 @@
 import React, { Component, ComponentType } from "react";
 import { instanceOf } from 'prop-types';
 import { Form } from "./Form";
-import { formKey } from "./types";
-import { Validator } from "./Utilify";
+import { formKey } from "./utilities/common";
+import { Validator } from "./utilities/validation";
 import { Field } from "./Field";
 
 export interface FieldProps<T> {
