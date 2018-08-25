@@ -1,6 +1,6 @@
 import React from "react";
 import { Field } from './Field';
-import { Optional } from "./Optional";
+import { Optional } from "./utilities/Optional";
 import { Dict } from "./utilities/common";
 import { ValidationError } from "./utilities/validation";
 

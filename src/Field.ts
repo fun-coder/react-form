@@ -1,4 +1,4 @@
-import { Optional } from "./Optional";
+import { Optional } from "./utilities/Optional";
 import { Dict, isFunction } from "./utilities/common";
 import { FieldValidator, MessageGenerator, ValidationError } from "./utilities/validation";
 

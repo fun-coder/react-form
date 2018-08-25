@@ -1,8 +1,13 @@
 import { PureComponent, default as React } from "react";
-import { FieldChange, ChangeSubscriber, ErrorSubscriber } from "../../src/Field";
-import { FieldFactory, FieldProps } from "../../src/FieldFactory";
-import { Optional } from "../../src/Optional";
-import { ValidationError } from "../../src/utilities/common";
+import {
+  FieldChange,
+  ChangeSubscriber,
+  ErrorSubscriber,
+  FieldProps,
+  ValidationError,
+  Optional,
+  FieldFactory
+} from "../../index";
 import { withLabel } from "../withLabel";
 
 interface TextFieldProps extends FieldProps<string> {

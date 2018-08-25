@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import { Form } from "../src/Form";
-import { FormFactory, FormProps } from "../src/FormFactory";
+import { Form, FormFactory, FormProps, Optional, Validator } from "../index";
 import { TextField } from "./fields/TextFields";
-import { Validator } from "../src/utilities/validation";
-import { Optional } from "../src/Optional";
 
 interface UserContainerProps extends FormProps {
   form?: Form

@@ -1,24 +1,17 @@
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
-import nodeResolve from 'rollup-plugin-node-resolve';
+import typescript from 'rollup-plugin-typescript2';
+
 import uglify from 'rollup-plugin-uglify';
 
 export default {
-  input: 'src/index.ts',
+  input: './index.ts',
   output: {
-    file: 'index.js',
+    file: 'index.bundle.js',
     format: 'cjs'
   },
   plugins: [
-    babel({
-      exclude: 'node_modules/**',
-      externalHelpers: false,
+    typescript({
+      tsconfig: "tsconfig.json",
     }),
-    nodeResolve({
-      jsnext: true,
-      main: true,
-    }),
-    commonjs(),
     uglify(),
   ],
 };
