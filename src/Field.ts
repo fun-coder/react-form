@@ -1,5 +1,6 @@
 import { Optional } from "./Optional";
-import { Dict, isFunction, MessageGenerator, ValidationError, Validator } from "./types";
+import { Dict, isFunction, MessageGenerator, ValidationError } from "./types";
+import { FieldValidator } from "./Utilify";
 
 export interface FieldChange<T> {
   name: string,
@@ -14,37 +15,37 @@ const getId = (() => {
 
 const subscriberKey = '__subscriberKey';
 
-export interface ChangeSubscriber {
-  (change: FieldChange<any>): any
+export interface ChangeSubscriber<T> {
+  (change: FieldChange<T>): any
 }
 
-export interface ErrorSubscriber {
-  (error?: ValidationError): any
+export interface ErrorSubscriber<T> {
+  (error?: ValidationError<T>): any
 }
 
-export class Field {
-  private changeSubscribers: Dict<ChangeSubscriber> = {};
-  private errorSubscribers: Dict<ErrorSubscriber> = {};
-  private validators: Validator[] = [];
-  private prevValue?: any;
-  private error?: ValidationError;
+export class Field<T> {
+  private changeSubscribers: Dict<ChangeSubscriber<T>> = {};
+  private errorSubscribers: Dict<ErrorSubscriber<T>> = {};
+  private validators: FieldValidator<T>[] = [];
+  private prevValue?: T;
+  private error?: ValidationError<T>;
 
   constructor(private readonly fieldName: string,
-              private value: any) {
+              private value?: T) {
   }
 
-  public setValidators(validators?: Validator[]) {
+  public setValidators(validators?: FieldValidator<T>[]) {
     Optional.of(validators).ifPresent(v => this.validators = v);
   }
 
-  public subscribe<T>(changeSubscriber: ChangeSubscriber, errorSubscriber: ErrorSubscriber) {
+  public subscribe(changeSubscriber: ChangeSubscriber<T>, errorSubscriber: ErrorSubscriber<T>) {
     Field.pushSubscriber(changeSubscriber, this.changeSubscribers);
     Field.pushSubscriber(errorSubscriber, this.errorSubscribers);
     changeSubscriber(this.getChange(this.prevValue));
     Optional.of(this.error).ifPresent((error) => this.notifyError(error));
   }
 
-  public unsubscribe<T>(...subscriber: Array<ChangeSubscriber | ErrorSubscriber>): void {
+  public unsubscribe(...subscriber: Array<ChangeSubscriber<T> | ErrorSubscriber<T>>): void {
     subscriber.forEach(subscriber => {
       const subscribeKeyDescriber = Object.getOwnPropertyDescriptor(subscriber, subscriberKey);
       Optional.of(subscribeKeyDescriber).ifPresent(describer => {
@@ -82,6 +83,10 @@ export class Field {
     return this.value;
   }
 
+  public getError(): ValidationError<T>|undefined {
+    return this.error;
+  }
+
   public getValidValue(): Promise<any> {
     return this.validate().then(() => this.value);
   }
@@ -90,13 +95,13 @@ export class Field {
     return { prev: prevValue, curr: this.value, name: this.fieldName };
   }
 
-  private async execValidator(validator: Validator, value: any) {
+  private async execValidator(validator: FieldValidator<T>, value: T) {
     const successful = await validator.validate(value);
     if (!successful) {
       const message = isFunction(validator.message)
         ? (validator.message as MessageGenerator)(this.fieldName, value)
         : validator.message as string;
-      throw new ValidationError(this.fieldName, message);
+      throw new ValidationError(this.fieldName, value, message);
     }
   }
 
@@ -106,7 +111,7 @@ export class Field {
     }
   }
 
-  private notifyError(error?: ValidationError) {
+  private notifyError(error?: ValidationError<T>) {
     for (const subscriberId in this.errorSubscribers) {
       this.errorSubscribers[subscriberId](error);
     }
@@ -126,7 +131,7 @@ export class Field {
     this.setError(undefined);
   }
 
-  private setError(error?: ValidationError) {
+  private setError(error?: ValidationError<T>) {
     if (!this.error && !error) {
       return;
     }

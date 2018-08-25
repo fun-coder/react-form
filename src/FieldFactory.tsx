@@ -1,12 +1,15 @@
 import React, { Component, ComponentType } from "react";
 import { instanceOf } from 'prop-types';
 import { Form } from "./Form";
-import { formKey, Validator } from "./types";
+import { formKey } from "./types";
+import { Validator } from "./Utilify";
+import { Field } from "./Field";
 
-export interface FieldProps {
+export interface FieldProps<T> {
   name: string,
-  defaultValue?: any,
-  validators?: Validator[],
+  defaultValue?: T,
+  validators?: Validator<T>[],
+  field?: Field<T>
 }
 
 export interface ContextTypes {
@@ -14,12 +17,16 @@ export interface ContextTypes {
 }
 
 export const FieldFactory = {
-  create<P extends FieldProps>(TargetComp: ComponentType<P>): ComponentType<P> {
+  create<P extends FieldProps<any>>(TargetComp: ComponentType<P>): ComponentType<P> {
     return class extends Component<P> {
       componentDidMount() {
-        const { name, validators } = this.props;
-        const filed = this.getForm().getFiled(name);
-        filed.setValidators(validators);
+        const { name, validators = [] } = this.props;
+        const form = this.getForm();
+        const fieldValidators = validators.map((validator: Validator<any>) => ({
+          validate: (value: any) => validator.validate(value, form),
+          message: validator.message
+        }));
+        form.getFiled(name).setValidators(fieldValidators);
       }
 
       render() {

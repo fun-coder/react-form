@@ -13,13 +13,9 @@ export interface MessageGenerator {
   (fieldName: string, value: any): string
 }
 
-export interface Validator {
-  validate: (value: any) => boolean | Promise<boolean>
-  message: MessageGenerator | string
-}
-
-export class ValidationError extends Error {
+export class ValidationError<T> extends Error {
   constructor(public readonly fieldName: string,
+              public readonly value: T,
               message: string) {
     super(message);
   }

@@ -1,12 +1,11 @@
 import { PureComponent, default as React } from "react";
-import { Field, FieldChange, ChangeSubscriber } from "../../src/Field";
+import { FieldChange, ChangeSubscriber, ErrorSubscriber } from "../../src/Field";
 import { FieldFactory, FieldProps } from "../../src/FieldFactory";
 import { Optional } from "../../src/Optional";
 import { ValidationError } from "../../src/types";
 import { withLabel } from "../withLabel";
 
-interface TextFieldProps extends FieldProps {
-  field?: Field
+interface TextFieldProps extends FieldProps<string> {
   type?: string
 }
 
@@ -34,21 +33,20 @@ class TextFieldComponent extends PureComponent<TextFieldProps, TextFieldState> {
     this.props.field!.unsubscribe(this.onFieldChange, this.onFieldError);
   }
 
-  private onFieldChange: ChangeSubscriber = (change: FieldChange<string>) => {
-    if (change.curr !== undefined) {
-      this.setState({ value: change.curr });
-    }
+  private onFieldChange: ChangeSubscriber<string> = (change: FieldChange<string>) => {
+    this.setState({ value: change.curr });
   };
 
-  private onFieldError = (error?: ValidationError) => {
+  private onFieldError: ErrorSubscriber<string> = (error?: ValidationError<string>) => {
     this.setState({ error: Optional.of(error).mapTo(e => e.message) });
   };
 
   render() {
-    const { value, error } = this.state;
+    const { value = '', error } = this.state;
     return <div className="text-field">
       <input type={ this.props.type }
              value={ value }
+             className={ error && 'error' }
              onFocus={ this.onFocus }
              onChange={ this.setValue }/>
       { error && <p className="error-message">{ error }</p> }
