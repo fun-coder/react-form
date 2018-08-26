@@ -2,7 +2,7 @@
   "name": "@qlee/react-form",
   "version": "0.1.6",
   "description": "react form",
-  "main": "./index.js",
+  "main": "./index.bundle.js",
   "scripts": {
     "start": "parcel ./example/index.html",
     "build": "rollup -c ./rollup.config.js",
