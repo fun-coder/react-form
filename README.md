@@ -2,12 +2,16 @@
 
 ## Create a field
 
-```javascript
-// input.js
+```typescript jsx
+// input.tsx
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { fieldHOC } from '@qlee/react-form';
+import { FieldFactory } from '@qlee/react-form';
+
+interface TextFieldProps extends FieldProps<string> {
+  type?: string
+}
 
 class InputComponent extends React.Component {
   constructor(props) {
