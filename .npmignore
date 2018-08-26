@@ -1,5 +1,4 @@
 rollup.config.js
-.babelrc
 package-lock.json
 node_modules
 .idea
@@ -7,4 +6,3 @@ example
 .cache
 dist
 .rpt2_cache
-index.bundle.js
