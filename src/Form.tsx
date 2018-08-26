@@ -32,7 +32,7 @@ export class Form {
     return Object.keys(errors).length > 0 ? errors : undefined
   }
 
-  public async submit() {
+  public async submit(): Promise<Record<string, any>> {
     const errors = await this.getFieldErrors();
     if (errors) throw errors;
     const data: Dict<any> = {};

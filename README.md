@@ -1,94 +1,77 @@
 # react-form
 
-## Create a field
-
-```typescript jsx
-// input.tsx
-
-import React from 'react';
-import PropTypes from 'prop-types';
-import { FieldFactory } from '@qlee/react-form';
-
-interface TextFieldProps extends FieldProps<string> {
-  type?: string
-}
-
-class InputComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: null, error: null };
-  }
-  
-  onChange = event => {
-    this.props.field.setValue(event.target.value);
-  }
-  
-  componentWillMount() {
-    this.props.field.subscribe(({ value, message }) => this.setState({ value, error: message }));
-  }
-  
-  render() {
-    return <div>
-      <label>{this.props.label}</label>
-      <input type="text" onChange={this.onChange} />
-      {this.state.error && <span>{this.state.error}</span>}
-    </div>
-  }
-  
-  static propTypes = {
-    field: PropTypes.object,
-  }
-}
-
-export default fieldHOC(InputComponent);
-```
-
-
 ## Create a form
-```javascript
-// order-form.js
+[**Link to form example**](https://github.com/fun-coder/react-form/blob/master/example/UserContainer.tsx)
 
-import React from 'react';
-import { formHOC, watchField } from '@qlee/react-form';
-import Input from './input';
+**Field Props**
+-`defaultValues?: Record<string, any>`
+<br> The form default value
 
-const requiredValidator = {
-  message: 'Username is required',
-  validate: name => !!name,
-}
+**Form Api**
+- `getFiled(fieldName: string): Field`
+<br>Get the field by field name
 
-class OrderFormComponent extends React.Component {
+- `Submit(): Promise<Record<string, any>>`
+<br>Return a promise
+<br>resolve form data when validating successfully
+<br>reject a map of ValidationError when validating failed
 
-  constructor(props) {
-    super(props);
-    props.form.registerTarget(this); // bind hooks for subscribers
-  }
-  
-  @watchField('username', { valid: true, immediate: false })
-  doSomethingWhenUsernameChanged({ value, prevValue, message }) {
-    console.log('Update Value from', prevValue, 'to', value);
-    if (message) console.log('And has error', message);
-  }
-  
-  submit = () => {
-    this.props.form.submit().then(data => {
-      console.log(data);
-    })
-  }
-  
-  render() {
-    return <div>
-      <Input name='username' label='Username'
-             validators={ [requiredValidator] } />
-      <Input name='password' label='Password' />
-      <button onClick={this.submit} >Submit</button>
-    </div>
-  }
-  
-  static propTypes = {
-    form: PropTypes.object,
-  }
-}
+## Create a field
+[**Link to field example**](https://github.com/fun-coder/react-form/blob/master/example/fields/TextFields.tsx)
 
-export default formHOC(OrderFormComponent)
+**Field Props**
+- `name: string`
+<br>The field name
+
+- `defaultValue?: T`
+<br>The field default value
+ 
+- `validators?: Validator<T>[]`
+<br> The field [validator](#validation) array 
+
+**Field Api**
+
+- `validate(): Promise<void>`
+<br>Return a promise. 
+<br>resolve void when validating successfully
+<br>reject a ValidationError when validating failed
+ 
+- `getValue(): T|undefined` 
+<br>Return field value
+
+- `getValidValue(): Promise<T|undefined>`
+<br>Return a promise. 
+<br>resolve the field value when validating successfully
+<br>reject a ValidationError when validating failed
+
+- `cleanError(): void`
+<br>Clean the field error 
+
+- `getError(): ValidationError<T> | undefined` 
+<br>Return the field error
+
+- `setValue(value: T): void`
+<br>Set the field value
+
+- `subscribe(changeSubscriber: ChangeSubscriber<T>, errorSubscriber: ErrorSubscriber<T>): void`
+    - *changeSubscriber*`(change: {name: string, prev?: T,curr: T}) => void`
+<br>changeSubscribe is a function triggered when the value changed 
+    - *errorSubscriber* is a function triggered when the field error changed (the error is missed when clear error) 
+<br>`(error?: {fieldName: string, value?: T, message: string}) => void`
+
+- `unsubscribe(...subscriber: Array<ChangeSubscriber<T> | ErrorSubscriber<T>>): void`
+<br>Not trigger the subscribers when there is a change
+
+
+## Validation
+**Validator Constructor**
+```typescript
+    interface MessageGenerator {
+      (fieldName: string, fieldValue: any): string
+    }
+
+    interface Validator<T> {
+       validate: (value: T, form: Form) => boolean | Promise<boolean>
+       message: MessageGenerator | string,
+    }
 ```

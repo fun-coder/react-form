@@ -61,7 +61,7 @@ export class Field<T> {
     this.notifyChanged(this.getChange(prevValue));
   }
 
-  public async validate() {
+  public async validate(): Promise<void> {
     return this.validateValue(this.value)
       .then(() => this.cleanError())
       .catch(error => {
@@ -87,7 +87,7 @@ export class Field<T> {
     return this.error;
   }
 
-  public getValidValue(): Promise<any> {
+  public getValidValue(): Promise<T|undefined> {
     return this.validate().then(() => this.value);
   }
 
